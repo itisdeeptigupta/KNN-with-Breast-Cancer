@@ -11773,7 +11773,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[99]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -11781,14 +11781,114 @@ div#notebook {
 
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="k">import</span> <span class="n">KNeighborsClassifier</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="k">import</span> <span class="n">ListedColormap</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;GTKAgg&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel_launcher.py:15: UserWarning: 
+This call to matplotlib.use() has no effect because the backend has already
+been chosen; matplotlib.use() must be called *before* pylab, matplotlib.pyplot,
+or matplotlib.backends is imported for the first time.
+
+The backend was *originally* set to &#39;module://ipykernel.pylab.backend_inline&#39; by the following code:
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\runpy.py&#34;, line 193, in _run_module_as_main
+    &#34;__main__&#34;, mod_spec)
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\runpy.py&#34;, line 85, in _run_code
+    exec(code, run_globals)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel_launcher.py&#34;, line 16, in &lt;module&gt;
+    app.launch_new_instance()
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\traitlets\config\application.py&#34;, line 658, in launch_instance
+    app.start()
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\kernelapp.py&#34;, line 486, in start
+    self.io_loop.start()
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\tornado\platform\asyncio.py&#34;, line 127, in start
+    self.asyncio_loop.run_forever()
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\asyncio\base_events.py&#34;, line 422, in run_forever
+    self._run_once()
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\asyncio\base_events.py&#34;, line 1432, in _run_once
+    handle._run()
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\asyncio\events.py&#34;, line 145, in _run
+    self._callback(*self._args)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\tornado\platform\asyncio.py&#34;, line 117, in _handle_events
+    handler_func(fileobj, events)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\tornado\stack_context.py&#34;, line 276, in null_wrapper
+    return fn(*args, **kwargs)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\zmq\eventloop\zmqstream.py&#34;, line 450, in _handle_events
+    self._handle_recv()
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\zmq\eventloop\zmqstream.py&#34;, line 480, in _handle_recv
+    self._run_callback(callback, msg)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\zmq\eventloop\zmqstream.py&#34;, line 432, in _run_callback
+    callback(*args, **kwargs)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\tornado\stack_context.py&#34;, line 276, in null_wrapper
+    return fn(*args, **kwargs)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\kernelbase.py&#34;, line 283, in dispatcher
+    return self.dispatch_shell(stream, msg)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\kernelbase.py&#34;, line 233, in dispatch_shell
+    handler(stream, idents, msg)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\kernelbase.py&#34;, line 399, in execute_request
+    user_expressions, allow_stdin)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\ipkernel.py&#34;, line 208, in do_execute
+    res = shell.run_cell(code, store_history=store_history, silent=silent)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\ipykernel\zmqshell.py&#34;, line 537, in run_cell
+    return super(ZMQInteractiveShell, self).run_cell(*args, **kwargs)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 2662, in run_cell
+    raw_cell, store_history, silent, shell_futures)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 2785, in _run_cell
+    interactivity=interactivity, compiler=compiler, result=result)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 2903, in run_ast_nodes
+    if self.run_code(code, result):
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 2963, in run_code
+    exec(code_obj, self.user_global_ns, self.user_ns)
+  File &#34;&lt;ipython-input-99-c6f9a2cde9d6&gt;&#34;, line 12, in &lt;module&gt;
+    get_ipython().run_line_magic(&#39;matplotlib&#39;, &#39;inline&#39;)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 2131, in run_line_magic
+    result = fn(*args,**kwargs)
+  File &#34;&lt;decorator-gen-108&gt;&#34;, line 2, in matplotlib
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\magic.py&#34;, line 187, in &lt;lambda&gt;
+    call = lambda f, *a, **k: f(*a, **k)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\magics\pylab.py&#34;, line 99, in matplotlib
+    gui, backend = self.shell.enable_matplotlib(args.gui)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\interactiveshell.py&#34;, line 3051, in enable_matplotlib
+    pt.activate_matplotlib(backend)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\IPython\core\pylabtools.py&#34;, line 311, in activate_matplotlib
+    matplotlib.pyplot.switch_backend(backend)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\matplotlib\pyplot.py&#34;, line 231, in switch_backend
+    matplotlib.use(newbackend, warn=False, force=True)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\matplotlib\__init__.py&#34;, line 1410, in use
+    reload(sys.modules[&#39;matplotlib.backends&#39;])
+  File &#34;C:\Users\rgoyal\Anaconda3\lib\importlib\__init__.py&#34;, line 166, in reload
+    _bootstrap._exec(spec, module)
+  File &#34;C:\Users\rgoyal\Anaconda3\Lib\site-packages\matplotlib\backends\__init__.py&#34;, line 16, in &lt;module&gt;
+    line for line in traceback.format_stack()
+
+
+  from ipykernel import kernelapp as app
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -11818,11 +11918,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
 </pre></div>
 
@@ -11840,207 +11939,52 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>&lt;bound method DataFrame.info of      Sample_code_number  Clump_Thickness  Uniformity_of_Cell_Size  \
-0               1000025                5                        1   
-1               1002945                5                        4   
-2               1015425                3                        1   
-3               1016277                6                        8   
-4               1017023                4                        1   
-5               1017122                8                       10   
-6               1018099                1                        1   
-7               1018561                2                        1   
-8               1033078                2                        1   
-9               1033078                4                        2   
-10              1035283                1                        1   
-11              1036172                2                        1   
-12              1041801                5                        3   
-13              1043999                1                        1   
-14              1044572                8                        7   
-15              1047630                7                        4   
-16              1048672                4                        1   
-17              1049815                4                        1   
-18              1050670               10                        7   
-19              1050718                6                        1   
-20              1054590                7                        3   
-21              1054593               10                        5   
-22              1056784                3                        1   
-23              1057013                8                        4   
-24              1059552                1                        1   
-25              1065726                5                        2   
-26              1066373                3                        2   
-27              1066979                5                        1   
-28              1067444                2                        1   
-29              1070935                1                        1   
-..                  ...              ...                      ...   
-669             1350423                5                       10   
-670             1352848                3                       10   
-671             1353092                3                        2   
-672             1354840                2                        1   
-673             1354840                5                        3   
-674             1355260                1                        1   
-675             1365075                4                        1   
-676             1365328                1                        1   
-677             1368267                5                        1   
-678             1368273                1                        1   
-679             1368882                2                        1   
-680             1369821               10                       10   
-681             1371026                5                       10   
-682             1371920                5                        1   
-683              466906                1                        1   
-684              466906                1                        1   
-685              534555                1                        1   
-686              536708                1                        1   
-687              566346                3                        1   
-688              603148                4                        1   
-689              654546                1                        1   
-690              654546                1                        1   
-691              695091                5                       10   
-692              714039                3                        1   
-693              763235                3                        1   
-694              776715                3                        1   
-695              841769                2                        1   
-696              888820                5                       10   
-697              897471                4                        8   
-698              897471                4                        8   
+<pre>   Sample_code_number  Clump_Thickness  Uniformity_of_Cell_Size  \
+0             1000025                5                        1   
+1             1002945                5                        4   
+2             1015425                3                        1   
+3             1016277                6                        8   
+4             1017023                4                        1   
+5             1017122                8                       10   
+6             1018099                1                        1   
+7             1018561                2                        1   
+8             1033078                2                        1   
+9             1033078                4                        2   
 
-     Uniformity_of_Cell_Shape  Marginal_Adhesion  Single_Epithelial_Cell_Size  \
-0                           1                  1                            2   
-1                           4                  5                            7   
-2                           1                  1                            2   
-3                           8                  1                            3   
-4                           1                  3                            2   
-5                          10                  8                            7   
-6                           1                  1                            2   
-7                           2                  1                            2   
-8                           1                  1                            2   
-9                           1                  1                            2   
-10                          1                  1                            1   
-11                          1                  1                            2   
-12                          3                  3                            2   
-13                          1                  1                            2   
-14                          5                 10                            7   
-15                          6                  4                            6   
-16                          1                  1                            2   
-17                          1                  1                            2   
-18                          7                  6                            4   
-19                          1                  1                            2   
-20                          2                 10                            5   
-21                          5                  3                            6   
-22                          1                  1                            2   
-23                          5                  1                            2   
-24                          1                  1                            2   
-25                          3                  4                            2   
-26                          1                  1                            1   
-27                          1                  1                            2   
-28                          1                  1                            2   
-29                          3                  1                            2   
-..                        ...                ...                          ...   
-669                        10                  8                            5   
-670                         7                  8                            5   
-671                         1                  2                            2   
-672                         1                  1                            2   
-673                         2                  1                            3   
-674                         1                  1                            2   
-675                         4                  1                            2   
-676                         2                  1                            2   
-677                         1                  1                            2   
-678                         1                  1                            2   
-679                         1                  1                            2   
-680                        10                 10                            5   
-681                        10                 10                            4   
-682                         1                  1                            2   
-683                         1                  1                            2   
-684                         1                  1                            2   
-685                         1                  1                            2   
-686                         1                  1                            2   
-687                         1                  1                            2   
-688                         1                  1                            2   
-689                         1                  1                            2   
-690                         1                  3                            2   
-691                        10                  5                            4   
-692                         1                  1                            2   
-693                         1                  1                            2   
-694                         1                  1                            3   
-695                         1                  1                            2   
-696                        10                  3                            7   
-697                         6                  4                            3   
-698                         8                  5                            4   
+   Uniformity_of_Cell_Shape  Marginal_Adhesion  Single_Epithelial_Cell_Size  \
+0                         1                  1                            2   
+1                         4                  5                            7   
+2                         1                  1                            2   
+3                         8                  1                            3   
+4                         1                  3                            2   
+5                        10                  8                            7   
+6                         1                  1                            2   
+7                         2                  1                            2   
+8                         1                  1                            2   
+9                         1                  1                            2   
 
-    Bare_Nuclei  Bland_Chromatin  Normal_Nucleoli  Mitoses  Class  
-0             1                3                1        1      2  
-1            10                3                2        1      2  
-2             2                3                1        1      2  
-3             4                3                7        1      2  
-4             1                3                1        1      2  
-5            10                9                7        1      4  
-6            10                3                1        1      2  
-7             1                3                1        1      2  
-8             1                1                1        5      2  
-9             1                2                1        1      2  
-10            1                3                1        1      2  
-11            1                2                1        1      2  
-12            3                4                4        1      4  
-13            3                3                1        1      2  
-14            9                5                5        4      4  
-15            1                4                3        1      4  
-16            1                2                1        1      2  
-17            1                3                1        1      2  
-18           10                4                1        2      4  
-19            1                3                1        1      2  
-20           10                5                4        4      4  
-21            7                7               10        1      4  
-22            1                2                1        1      2  
-23            ?                7                3        1      4  
-24            1                3                1        1      2  
-25            7                3                6        1      4  
-26            1                2                1        1      2  
-27            1                2                1        1      2  
-28            1                2                1        1      2  
-29            1                1                1        1      2  
-..          ...              ...              ...      ...    ...  
-669           5                7               10        1      4  
-670           8                7                4        1      4  
-671           1                3                1        1      2  
-672           1                3                1        1      2  
-673           1                1                1        1      2  
-674           1                2                1        1      2  
-675           1                1                1        1      2  
-676           1                2                1        1      2  
-677           1                1                1        1      2  
-678           1                1                1        1      2  
-679           1                1                1        1      2  
-680          10               10               10        7      4  
-681          10                5                6        3      4  
-682           1                3                2        1      2  
-683           1                1                1        1      2  
-684           1                1                1        1      2  
-685           1                1                1        1      2  
-686           1                1                1        1      2  
-687           1                2                3        1      2  
-688           1                1                1        1      2  
-689           1                1                1        8      2  
-690           1                1                1        1      2  
-691           5                4                4        1      4  
-692           1                1                1        1      2  
-693           1                2                1        2      2  
-694           2                1                1        1      2  
-695           1                1                1        1      2  
-696           3                8               10        2      4  
-697           4               10                6        1      4  
-698           5               10                4        1      4  
-
-[699 rows x 11 columns]&gt;
-Sample_code_number              int64
-Clump_Thickness                 int64
-Uniformity_of_Cell_Size         int64
-Uniformity_of_Cell_Shape        int64
-Marginal_Adhesion               int64
-Single_Epithelial_Cell_Size     int64
-Bare_Nuclei                    object
-Bland_Chromatin                 int64
-Normal_Nucleoli                 int64
-Mitoses                         int64
-Class                           int64
+   Bare_Nuclei  Bland_Chromatin  Normal_Nucleoli  Mitoses  Class  
+0          1.0                3                1        1      2  
+1         10.0                3                2        1      2  
+2          2.0                3                1        1      2  
+3          4.0                3                7        1      2  
+4          1.0                3                1        1      2  
+5         10.0                9                7        1      4  
+6         10.0                3                1        1      2  
+7          1.0                3                1        1      2  
+8          1.0                1                1        5      2  
+9          1.0                2                1        1      2  
+Sample_code_number               int64
+Clump_Thickness                  int64
+Uniformity_of_Cell_Size          int64
+Uniformity_of_Cell_Shape         int64
+Marginal_Adhesion                int64
+Single_Epithelial_Cell_Size      int64
+Bare_Nuclei                    float64
+Bland_Chromatin                  int64
+Normal_Nucleoli                  int64
+Mitoses                          int64
+Class                            int64
 dtype: object
 </pre>
 </div>
@@ -12050,14 +11994,21 @@ dtype: object
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Does it contain any missing value? - NO</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Does it contain any missing value</span>
-
-<span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12118,14 +12069,21 @@ dtype: object
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Does it contain any zero values? - NO NO</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Does it contain any zero values</span>
-
-<span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12186,14 +12144,21 @@ dtype: object
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Does it contain any special symbols? - OHH YES</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Does it contain any special symbols</span>
-
-<span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;?&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;?&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
 </div>
@@ -12324,9 +12289,23 @@ dtype: object
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Remove-the-special-character-?-by-following-steps:">Remove the special character ? by following steps:<a class="anchor-link" href="#Remove-the-special-character-?-by-following-steps:">&#182;</a></h4><ol>
+<li>replace it with NaN</li>
+<li>Convert the datatype to int from str</li>
+<li>Calculate the mean value of the column by excluding NaN</li>
+<li>Replace the NaN with mean values</li>
+</ol>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">Spl_Char_Not_Accepted</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Sample_code_number&quot;</span>
@@ -12343,32 +12322,10 @@ dtype: object
 
 <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">Spl_Char_Not_Accepted</span><span class="p">:</span>
     <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
-</pre></div>
+    
+<span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Bare_Nuclei&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[[</span><span class="s1">&#39;Bare_Nuclei&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">)</span>
 
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Bare_Nuclei&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[[</span><span class="s1">&#39;Bare_Nuclei&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">Spl_Char_Not_Accepted</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">Spl_Char_Not_Accepted</span><span class="p">:</span>
     <span class="n">mean</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">skipna</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span>
     <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span>
 </pre></div>
@@ -12380,10 +12337,12 @@ dtype: object
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">23</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">139</span><span class="p">,</span><span class="mi">145</span><span class="p">,</span><span class="mi">158</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Let&#39;s cross the replaced values</span>
+
+<span class="n">dataset</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">23</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">139</span><span class="p">,</span><span class="mi">145</span><span class="p">,</span><span class="mi">158</span><span class="p">]]</span>
 </pre></div>
 
 </div>
@@ -12396,7 +12355,7 @@ dtype: object
 
 <div class="output_area">
 
-<div class="prompt output_prompt">Out[34]:</div>
+<div class="prompt output_prompt">Out[62]:</div>
 
 
 
@@ -12516,7 +12475,7 @@ dtype: object
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Split the dataset</span>
@@ -12526,7 +12485,7 @@ dtype: object
 
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span>
 
-<span class="c1"># Feature Scaling</span>
+<span class="c1"># Feature Scaling, normalise the values under the scale of -1 to 1</span>
 <span class="n">Sc_X</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">Sc_X</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">Sc_X</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -12574,6 +12533,14 @@ dtype: object
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Constructing-two-classifiers-to-check-which-one-predict-better-score">Constructing two classifiers to check which one predict better score<a class="anchor-link" href="#Constructing-two-classifiers-to-check-which-one-predict-better-score">&#182;</a></h4>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[44]:</div>
@@ -12614,49 +12581,18 @@ dtype: object
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">Classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 
 <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
-<span class="n">cm</span>
-</pre></div>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-<div class="prompt output_prompt">Out[49]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([[83,  2],
-       [ 2, 53]], dtype=int64)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;accuracy_score: &quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;f1_score: &quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;accuracy_score: &quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;precision_score: &quot;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;recall_score: &quot;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;f1_score: &quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -12673,9 +12609,14 @@ dtype: object
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>accuracy_score:  0.9714285714285714
-f1_score:  0.9700534759358288
+<pre>[[83  2]
+ [ 2 53]] 
+
+
+accuracy_score:  0.9714285714285714
 precision_score:  0.9700534759358288
+recall_score:  0.9700534759358288
+f1_score:  0.9700534759358288
 </pre>
 </div>
 </div>
@@ -12683,6 +12624,92 @@ precision_score:  0.9700534759358288
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Classifier_13</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
+<span class="n">Classifier_13</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">y_pred_13</span> <span class="o">=</span> <span class="n">Classifier</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="n">cm_13</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cm_13</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;accuracy_score: &quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_13</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;precision_score: &quot;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_13</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;recall_score: &quot;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_13</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;f1_score: &quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_13</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s2">&quot;macro&quot;</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[[83  2]
+ [ 2 53]] 
+
+
+accuracy_score:  0.9714285714285714
+precision_score:  0.9700534759358288
+recall_score:  0.9700534759358288
+f1_score:  0.9700534759358288
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>   CONFUSION MATRIX   
+                       Negative (predicted) Positive (predicted)
+    Negative (actual)   true negative      false positive
+    Positive (actual)   false negative     true positive
+
+
+Accuracy =  truepositives + truenegatives 
+            -----------------------------
+            total values
+
+
+Precision helps when the costs of false positives are high.
+precision = truepositives
+            -----------------------------
+            truepositives + falsepositives
+
+
+Recall helps when the cost of false negatives is high.
+Recall  = truepositives
+          -----------------------------
+          truepositives + falsenegatives
+
+
+F1 is an overall measure of a model’s accuracy that combines precision and recall, in that weird way that addition and multiplication just mix two ingredients to make a separate dish altogether. That is, a good F1 score means that you have low false positives and low false negatives, so you’re correctly identifying real threats and you are not disturbed by false alarms. An F1 score is considered perfect when it’s 1, while the model is a total failure when it’s 0.
+
+Recall = 2 * precision * recall
+             ------------------
+             precision + recall</code></pre>
+
+</div>
+</div>
 </div>
     </div>
   </div>

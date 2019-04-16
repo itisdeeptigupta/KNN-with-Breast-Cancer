@@ -1,0 +1,205 @@
+
+# coding: utf-8
+
+# In[99]:
+
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score, precision_score, recall_score
+
+from sklearn.neighbors import KNeighborsClassifier
+
+import math
+
+get_ipython().run_line_magic('matplotlib', 'inline')
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+matplotlib.use('GTKAgg')
+
+
+# In[10]:
+
+
+dataset = pd.read_csv("C:\\MyRWork\\Data\\UCI-Breast-Cancer-Wisconsin\\breast-cancer-wisconsin.data", header=["Sample_code_number"
+,"Clump_Thickness"
+,"Uniformity_of_Cell_Size"
+,"Uniformity_of_Cell_Shape"
+,"Marginal_Adhesion"
+,"Single_Epithelial_Cell_Size"
+,"Bare_Nuclei"
+,"Bland_Chromatin"
+,"Normal_Nucleoli"
+,"Mitoses"
+,"Class"])
+
+
+# In[60]:
+
+
+print(dataset.head(10))
+print(dataset.dtypes)
+
+
+# Does it contain any missing value? - NO
+
+# In[13]:
+
+
+dataset[dataset.isnull().any(axis=1)].head()
+
+
+# Does it contain any zero values? - NO NO
+
+# In[17]:
+
+
+dataset[dataset.isin([0]).any(axis=1)].head()
+
+
+#  Does it contain any special symbols? - OHH YES 
+
+# In[28]:
+
+
+dataset[dataset.isin(['?']).any(axis=1)].head()
+
+
+# #### Remove the special character ? by following steps:
+#  1. replace it with NaN
+#  2. Convert the datatype to int from str
+#  3. Calculate the mean value of the column by excluding NaN
+#  4. Replace the NaN with mean values
+
+# In[61]:
+
+
+Spl_Char_Not_Accepted = ["Sample_code_number"
+,"Clump_Thickness"
+,"Uniformity_of_Cell_Size"
+,"Uniformity_of_Cell_Shape"
+,"Marginal_Adhesion"
+,"Single_Epithelial_Cell_Size"
+,"Bare_Nuclei"
+,"Bland_Chromatin"
+,"Normal_Nucleoli"
+,"Mitoses"
+,"Class"]
+
+for column in Spl_Char_Not_Accepted:
+    dataset[column] = dataset[column].replace('?', np.NaN)
+    
+dataset['Bare_Nuclei'] = dataset[['Bare_Nuclei']].apply(pd.to_numeric)
+
+for column in Spl_Char_Not_Accepted:
+    mean = int(dataset[column].mean(skipna = True))
+    dataset[column] = dataset[column].replace(np.NaN, mean)
+
+
+# In[62]:
+
+
+# Let's cross the replaced values
+
+dataset.iloc[[23,40,139,145,158]]
+
+
+# In[63]:
+
+
+# Split the dataset
+
+X = dataset.iloc[:,0:10]
+y = dataset.iloc[:,10]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 0, test_size = 0.2)
+
+# Feature Scaling, normalise the values under the scale of -1 to 1
+Sc_X = StandardScaler()
+X_train = Sc_X.fit_transform(X_train)
+X_test = Sc_X.fit_transform(X_test)
+
+
+# In[45]:
+
+
+# decide for n_neighbors = k, because the dataset has 699 rows
+
+math.sqrt(len(y_test))
+
+# take 11 or 13 to start with classifier,odd values will make it easy to pick the group
+
+
+# #### Constructing two classifiers to check which one predict better score
+
+# In[44]:
+
+
+# Define the model : Init Knn
+
+Classifier = KNeighborsClassifier(n_neighbors=11, p=2, metric='euclidean')
+Classifier.fit(X_train, y_train)
+
+
+# In[70]:
+
+
+y_pred = Classifier.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+print(cm, '\n\n')
+
+print("accuracy_score: ", accuracy_score(y_test, y_pred))
+print("precision_score: ", precision_score(y_test, y_pred, average="macro"))
+print("recall_score: ", recall_score(y_test, y_pred, average="macro"))
+print("f1_score: ", f1_score(y_test, y_pred, average="macro"))
+
+
+# In[71]:
+
+
+Classifier_13 = KNeighborsClassifier(n_neighbors=11, p=2, metric='euclidean')
+Classifier_13.fit(X_train, y_train)
+
+y_pred_13 = Classifier.predict(X_test)
+
+cm_13 = confusion_matrix(y_test, y_pred)
+print(cm_13, '\n\n')
+
+print("accuracy_score: ", accuracy_score(y_test, y_pred_13))
+print("precision_score: ", precision_score(y_test, y_pred_13, average="macro"))
+print("recall_score: ", recall_score(y_test, y_pred_13, average="macro"))
+print("f1_score: ", f1_score(y_test, y_pred_13, average="macro"))
+
+
+#        CONFUSION MATRIX   
+#                            Negative (predicted)	Positive (predicted)
+#         Negative (actual)	true negative	   false positive
+#         Positive (actual)	false negative	   true positive
+#     
+#     
+#     Accuracy =  truepositives + truenegatives 
+#                 -----------------------------
+#                 total values
+#     
+#     
+#     Precision helps when the costs of false positives are high.
+#     precision = truepositives
+#                 -----------------------------
+#                 truepositives + falsepositives
+#           
+#           
+#     Recall helps when the cost of false negatives is high.
+#     Recall  = truepositives
+#               -----------------------------
+#               truepositives + falsenegatives
+#               
+# 
+#     F1 is an overall measure of a model’s accuracy that combines precision and recall, in that weird way that addition and multiplication just mix two ingredients to make a separate dish altogether. That is, a good F1 score means that you have low false positives and low false negatives, so you’re correctly identifying real threats and you are not disturbed by false alarms. An F1 score is considered perfect when it’s 1, while the model is a total failure when it’s 0.
+#     
+#     Recall = 2 * precision * recall
+#                  ------------------
+#                  precision + recall
